@@ -5,7 +5,9 @@
     <link rel="icon" type="image/svg+xml" href="/shop/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home page</title>
-    <script type="module" crossorigin src="/shop/assets/styles-JE8YjOlG.js"></script>
+    <script type="module" crossorigin src="/shop/index.js"></script>
+    <link rel="modulepreload" crossorigin href="/shop/assets/styles-JE8YjOlG.js">
+    <link rel="modulepreload" crossorigin href="/shop/assets/vendor-N5iQpiFS.js">
     <link rel="stylesheet" crossorigin href="/shop/assets/styles-CTxpv8u5.css">
   </head>
   <body>
@@ -31,7 +33,9 @@
       >
         ×
       </button>
-      <button class="search-form__btn" type="submit">Search</button>
+      <button class="search-form__btn js-search-btn" type="submit">
+        Search
+      </button>
     </form>
 
     <nav class="nav">
@@ -101,12 +105,15 @@
     <div class="modal-product"></div>
     <div class="modal-product__actions">
       <button
-        class="modal-product__btn modal-product__btn--wishlist"
+        class="modal-product__btn modal-product__btn--wishlist js-wish-btn"
         type="button"
       >
         Add to Wishlist
       </button>
-      <button class="modal-product__btn modal-product__btn--cart" type="button">
+      <button
+        class="modal-product__btn modal-product__btn--cart js-cart-btn"
+        type="button"
+      >
         Add to Cart
       </button>
     </div>
