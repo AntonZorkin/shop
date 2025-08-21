@@ -1,11 +1,11 @@
-import"./assets/styles-JE8YjOlG.js";import{a as s}from"./assets/vendor-N5iQpiFS.js";const c={categoriesElem:document.querySelector(".categories"),productsElem:document.querySelector(".products"),loadMoreElem:document.querySelector(".load-more-btn"),searchBtnElem:document.querySelector(".search-form"),wishElem:document.querySelector(".js-wish-btn"),cartElem:document.querySelector(".js-cart-btn")},a=t=>{const r=t.map(e=>`<li class="categories__item">
-   <button class="categories__btn" type="button">${e}</button>
- </li>`).join("");c.categoriesElem.innerHTML=r},n=t=>{const r=t.map(e=>`
-    <li class="products__item" data-id="${e.id}">
-    <img class="products__image" src="${e.thumbnail}" alt="${e.description}"/>
-    <p class="products__title">${e.title}</p>
-    <p class="products__brand"><span class="products__brand--bold">Brand:${e.brand}</span></p>
-    <p class="products__category">Category: ${e.category}</p>
-    <p class="products__price">Price: ${e.price}$</p>
- </li>`).join("");c.productsElem.insertAdjacentHTML("beforeend",r)},d="https://dummyjson.com/",o={CATEGORY:"products/category-list",PRODUCTS:"products?"};s.defaults.baseURL=d;async function i(){try{return(await s.get(`${o.CATEGORY}`)).data}catch(t){throw t}}const u=1;async function l(){const t=new URLSearchParams({limit:12,skip:(u-1)*12});try{return(await s.get(`${o.PRODUCTS}`,{params:t})).data.products}catch(r){throw r}}const p=()=>{const t=document.querySelector(".categories__btn");t&&t.classList.add("categories__btn--active")},m=async()=>{const t=await i();a(["All",...t]),p();const r=await l();n(r)};m();
+import"./assets/styles-JE8YjOlG.js";import{a as n}from"./assets/vendor-N5iQpiFS.js";const s={categoriesElem:document.querySelector(".categories"),productsElem:document.querySelector(".products"),categoryElem:document.querySelector(".categories__item"),loadMoreElem:document.querySelector(".load-more-btn"),searchBtnElem:document.querySelector(".search-form"),wishElem:document.querySelector(".js-wish-btn"),cartElem:document.querySelector(".js-cart-btn")},_=e=>e.map(t=>`<li class="categories__item">
+   <button class="categories__btn" type="button">${t}</button>
+ </li>`).join(""),i=e=>e.map(t=>`
+    <li class="products__item" data-id="${t.id}">
+    <img class="products__image" src="${t.thumbnail}" alt="${t.description}"/>
+    <p class="products__title">${t.title}</p>
+    <p class="products__brand"><span class="products__brand--bold">Brand:${t.brand}</span></p>
+    <p class="products__category">Category: ${t.category}</p>
+    <p class="products__price">Price: ${t.price}$</p>
+ </li>`).join(""),y="https://dummyjson.com/",l={CATEGORIES:"products/category-list",PRODUCTS:"products?",CATEGORY:"products/category/"},c=12;let a="All";const E=()=>{const e=document.querySelector(".categories__btn");e&&(e.classList.add("categories__btn--active"),a=e.textContent)},h=e=>{const t=e.target.closest(".categories__btn");if(!t)return;const r=document.querySelector(".categories__btn--active");r&&r.classList.remove("categories__btn--active"),t.classList.add("categories__btn--active"),a=t.textContent},p=()=>{d>o?s.loadMoreElem.classList.remove("is-hidden"):s.loadMoreElem.classList.add("is-hidden")};n.defaults.baseURL=y;async function b(){try{return(await n.get(`${l.CATEGORIES}`)).data}catch(e){throw e}}let d;async function m(){let e=new URLSearchParams({limit:c,skip:(o-1)*c});try{const r=(await n.get(`${l.CATEGORY}${a}`,{params:e})).data;return d=Math.ceil(r.total/c),p(),r.products}catch(t){throw t}}async function u(){let e=new URLSearchParams({limit:c,skip:(o-1)*c});try{const r=(await n.get(`${l.PRODUCTS}`,{params:e})).data;return d=Math.ceil(r.total/c),p(),r.products}catch(t){throw t}}let o=1;const w=async()=>{const e=await b(),t=_(["All",...e]);s.categoriesElem.innerHTML=t,E();const r=await u(),g=i(r);s.productsElem.innerHTML=g};s.categoriesElem.addEventListener("click",async e=>{h(e),o=1;try{const t=a==="All"?await u():await m();s.productsElem.innerHTML=i(t)}catch(t){throw t}});s.loadMoreElem.addEventListener("click",async e=>{o+=1;try{let t;a&&a!=="All"?t=await m():t=await u();const r=i(t);s.productsElem.insertAdjacentHTML("beforeend",r)}catch(t){throw t}});w();
 //# sourceMappingURL=index.js.map
