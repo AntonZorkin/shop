@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { BASE_URL, ENDPOINT } from './constants';
+import { BASE_URL, ENDPOINT, LIMIT } from './constants';
+import { categoryName, activateLoadMore } from './helpers';
+import { refs } from './refs';
+import { currentPage } from './handlers';
 
 axios.defaults.baseURL = BASE_URL;
 
 export async function getCategories() {
   try {
-    const response = await axios.get(`${ENDPOINT.CATEGORY}`);
+    const response = await axios.get(`${ENDPOINT.CATEGORIES}`);
     const data = response.data;
     return data;
   } catch (error) {
@@ -13,17 +16,37 @@ export async function getCategories() {
   }
 }
 
-const currentPage = 1;
-export async function getProducts() {
-  const params = new URLSearchParams({
-    limit: 12,
-    skip: (currentPage - 1) * 12,
-  });
+export let totalPages;
 
+export async function getProductsByCategory() {
+  let params = new URLSearchParams({
+    limit: LIMIT,
+    skip: (currentPage - 1) * LIMIT,
+  });
+  try {
+    const response = await axios.get(`${ENDPOINT.CATEGORY}${categoryName}`, {
+      params,
+    });
+    const data = response.data;
+    totalPages = Math.ceil(data.total / LIMIT);
+    activateLoadMore();
+    return data.products;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProducts() {
+  let params = new URLSearchParams({
+    limit: LIMIT,
+    skip: (currentPage - 1) * LIMIT,
+  });
   try {
     const response = await axios.get(`${ENDPOINT.PRODUCTS}`, { params });
-    const data = response.data.products;
-    return data;
+    const data = response.data;
+    totalPages = Math.ceil(data.total / LIMIT);
+    activateLoadMore();
+    return data.products;
   } catch (error) {
     throw error;
   }

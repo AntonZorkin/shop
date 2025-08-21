@@ -1,5 +1,7 @@
 export const BASE_URL = 'https://dummyjson.com/';
 export const ENDPOINT = {
-  CATEGORY: 'products/category-list',
+  CATEGORIES: 'products/category-list',
   PRODUCTS: `products?`,
+  CATEGORY: 'products/category/',
 };
+export const LIMIT = 12;
