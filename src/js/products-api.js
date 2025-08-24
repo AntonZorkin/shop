@@ -51,3 +51,13 @@ export async function getProducts() {
     throw error;
   }
 }
+
+export const getProductById = async productId => {
+  try {
+    const response = await axios.get(`${ENDPOINT.ID}${productId}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

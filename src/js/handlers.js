@@ -1,8 +1,13 @@
-import { createCategories, createProducts } from './render-function';
+import {
+  createCategories,
+  createProducts,
+  createModal,
+} from './render-function';
 import {
   getCategories,
   getProductsByCategory,
   getProducts,
+  getProductById,
 } from './products-api';
 import { activeFirstBtn, activeBtn, categoryName } from './helpers';
 import { refs } from './refs';
@@ -49,3 +54,12 @@ refs.loadMoreElem.addEventListener('click', async e => {
     throw error;
   }
 });
+
+export const onProductsClick = async e => {
+  const li = e.target.closest('.products__item');
+  if (!li) return;
+  const productId = Number(li.dataset.id);
+  const data = await getProductById(productId);
+  refs.modalElem.innerHTML = createModal(data);
+  refs.modalRoot.classList.add('modal--is-open');
+};

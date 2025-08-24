@@ -6,4 +6,6 @@ export const refs = {
   searchBtnElem: document.querySelector('.search-form'),
   wishElem: document.querySelector('.js-wish-btn'),
   cartElem: document.querySelector('.js-cart-btn'),
+  modalElem: document.querySelector('.modal-product'),
+  modalRoot: document.querySelector('.modal'),
 };
