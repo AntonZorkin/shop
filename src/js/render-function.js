@@ -38,6 +38,5 @@ export const createModal = data =>
           data.returnPolicy
         }</p>
         <p class="modal-product__price">Price: ${data.price}$</p>
-             
         <button class="modal-product__buy-btn" type="button">Buy</button>
       </div>`;

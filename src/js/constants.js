@@ -4,5 +4,6 @@ export const ENDPOINT = {
   PRODUCTS: `products?`,
   CATEGORY: 'products/category/',
   ID: 'products/',
+  NAME: 'products/search?q=',
 };
 export const LIMIT = 12;

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL, ENDPOINT, LIMIT } from './constants';
 import { categoryName, activateLoadMore } from './helpers';
 import { refs } from './refs';
-import { currentPage } from './handlers';
+import { currentPage, productName } from './handlers';
 
 axios.defaults.baseURL = BASE_URL;
 
@@ -57,6 +57,22 @@ export const getProductById = async productId => {
     const response = await axios.get(`${ENDPOINT.ID}${productId}`);
     const data = response.data;
     return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductByName = async productName => {
+  let params = new URLSearchParams({
+    limit: LIMIT,
+    skip: (currentPage - 1) * LIMIT,
+  });
+  try {
+    const response = await axios.get(`${ENDPOINT.NAME}${productName}`, {
+      params,
+    });
+    const data = response.data;
+    return data.products;
   } catch (error) {
     throw error;
   }

@@ -8,8 +8,10 @@ import {
   getProductsByCategory,
   getProducts,
   getProductById,
+  getProductByName,
 } from './products-api';
 import { activeFirstBtn, activeBtn, categoryName } from './helpers';
+import { openModal } from './modal';
 import { refs } from './refs';
 
 export let currentPage = 1;
@@ -24,7 +26,7 @@ export const init = async () => {
   refs.productsElem.innerHTML = productsMarkup;
 };
 
-refs.categoriesElem.addEventListener('click', async e => {
+export const onCategoreClick = async e => {
   activeBtn(e);
   currentPage = 1;
   try {
@@ -37,9 +39,9 @@ refs.categoriesElem.addEventListener('click', async e => {
   } catch (error) {
     throw error;
   }
-});
+};
 
-refs.loadMoreElem.addEventListener('click', async e => {
+export const onLoadMoreClick = async e => {
   currentPage += 1;
   try {
     let products;
@@ -53,13 +55,29 @@ refs.loadMoreElem.addEventListener('click', async e => {
   } catch (error) {
     throw error;
   }
-});
+};
 
 export const onProductsClick = async e => {
   const li = e.target.closest('.products__item');
   if (!li) return;
-  const productId = Number(li.dataset.id);
-  const data = await getProductById(productId);
-  refs.modalElem.innerHTML = createModal(data);
-  refs.modalRoot.classList.add('modal--is-open');
+  try {
+    const productId = Number(li.dataset.id);
+    const data = await getProductById(productId);
+    refs.modalElem.innerHTML = createModal(data);
+    openModal();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export let productName;
+export const onFormSubmit = async e => {
+  e.preventDefault();
+  productName = refs.inputElem.value.trim();
+  const products = await getProductByName(productName);
+  if (products.length === 0) {
+    /////////////////////////////// додати ізітост
+  }
+  const productsByNameMarkup = createProducts(products);
+  refs.productsElem.innerHTML = productsByNameMarkup;
 };
