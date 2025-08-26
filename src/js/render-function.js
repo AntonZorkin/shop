@@ -31,6 +31,7 @@ export const createModal = data =>
         <p class="modal-product__title">${data.title}</p>
         <ul class="modal-product__tags">${data.tags}</ul>
         <p class="modal-product__description">${data.description}</p>
+        <p class="invisible js-product-id">${data.id}</p>
         <p class="modal-product__shipping-information">Shipping: ${
           data.shippingInformation
         }</p>

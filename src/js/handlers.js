@@ -57,6 +57,7 @@ export const onLoadMoreClick = async e => {
   }
 };
 
+let currentProductId;
 export const onProductsClick = async e => {
   const li = e.target.closest('.products__item');
   if (!li) return;
@@ -65,6 +66,26 @@ export const onProductsClick = async e => {
     const data = await getProductById(productId);
     refs.modalElem.innerHTML = createModal(data);
     openModal();
+    const cartBtnElem = refs.modalRoot.querySelector('.js-cart-btn'); //!!!!!!!!!!!!!!!
+    console.log(cartBtnElem);
+
+    currentProductId = String(data.id);
+    if (!cartBtnElem.dataset.bound) {
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      cartBtnElem.addEventListener('click', onCartBtnClick);
+      cartBtnElem.dataset.bound = '1';
+    }
+
+    let storageProductId = JSON.parse(localStorage.getItem('cart'));
+    if (storageProductId === null) {
+      storageProductId = [];
+    }
+
+    if (storageProductId.includes(currentProductId)) {
+      cartBtnElem.textContent = 'Remove from cart';
+    } else {
+      cartBtnElem.textContent = 'Add to cart';
+    }
   } catch (error) {
     throw error;
   }
@@ -80,4 +101,17 @@ export const onFormSubmit = async e => {
   }
   const productsByNameMarkup = createProducts(products);
   refs.productsElem.innerHTML = productsByNameMarkup;
+};
+
+export const onCartBtnClick = e => {
+  let storageProductId = JSON.parse(localStorage.getItem('cart'));
+  if (storageProductId === null) {
+    storageProductId = [];
+  }
+  if (!storageProductId.includes(currentProductId)) {
+    storageProductId[storageProductId.length] = currentProductId;
+    e.currentTarget.textContent = 'Remove from cart'; //????????????????????
+  }
+
+  localStorage.setItem('cart', JSON.stringify(storageProductId));
 };
