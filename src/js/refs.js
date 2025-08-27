@@ -4,7 +4,6 @@ export const refs = {
   categoryElem: document.querySelector('.categories__item'),
   loadMoreElem: document.querySelector('.load-more-btn'),
   searchBtnElem: document.querySelector('.search-form'),
-  wishBtnElem: document.querySelector('.js-wish-btn'), //прибрати
 
   modalElem: document.querySelector('.modal-product'),
   modalRoot: document.querySelector('.modal'),

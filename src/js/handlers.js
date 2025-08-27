@@ -17,6 +17,16 @@ import { refs } from './refs';
 export let currentPage = 1;
 
 export const init = async () => {
+  const savedTheme = localStorage.getItem('theme');
+  if (!savedTheme) {
+    localStorage.setItem('theme', 'light');
+  }
+  if (savedTheme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+  } else {
+    document.body.removeAttribute('data-theme');
+  }
+
   const data = await getCategories();
   const categoriesMarkup = createCategories(['All', ...data]);
   refs.categoriesElem.innerHTML = categoriesMarkup;
@@ -67,14 +77,8 @@ export const onProductsClick = async e => {
     refs.modalElem.innerHTML = createModal(data);
     openModal();
     const cartBtnElem = refs.modalRoot.querySelector('.js-cart-btn'); //!!!!!!!!!!!!!!!
-    console.log(cartBtnElem);
 
     currentProductId = String(data.id);
-    if (!cartBtnElem.dataset.bound) {
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      cartBtnElem.addEventListener('click', onCartBtnClick);
-      cartBtnElem.dataset.bound = '1';
-    }
 
     let storageProductId = JSON.parse(localStorage.getItem('cart'));
     if (storageProductId === null) {
@@ -83,13 +87,105 @@ export const onProductsClick = async e => {
 
     if (storageProductId.includes(currentProductId)) {
       cartBtnElem.textContent = 'Remove from cart';
+      cartBtnElem.classList.add('in-cart');
+      cartBtnElem.addEventListener('click', onRemoveFromCartClick);
     } else {
       cartBtnElem.textContent = 'Add to cart';
+      cartBtnElem.addEventListener('click', onCartBtnClick);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////
+    const wishBtnElem = refs.modalRoot.querySelector('.js-wish-btn');
+
+    let storageWishProductId = JSON.parse(localStorage.getItem('wishlist'));
+    if (storageWishProductId === null) {
+      storageWishProductId = [];
+    }
+
+    if (storageWishProductId.includes(currentProductId)) {
+      wishBtnElem.textContent = 'Remove from Wishlist';
+      wishBtnElem.classList.add('in-wish');
+      wishBtnElem.addEventListener('click', onRemoveFromWishClick);
+    } else {
+      wishBtnElem.textContent = 'Add to Wishlist';
+      wishBtnElem.addEventListener('click', onWishBtnClick);
     }
   } catch (error) {
     throw error;
   }
 };
+
+export const onCartBtnClick = e => {
+  const targetBtn = e.currentTarget;
+  let storageProductId = JSON.parse(localStorage.getItem('cart'));
+  if (storageProductId === null) {
+    storageProductId = [];
+  }
+  if (!storageProductId.includes(currentProductId)) {
+    storageProductId.push(currentProductId);
+    targetBtn.textContent = 'Remove from cart';
+    targetBtn.classList.add('in-cart');
+    targetBtn.removeEventListener('click', onCartBtnClick);
+    targetBtn.addEventListener('click', onRemoveFromCartClick);
+  }
+
+  localStorage.setItem('cart', JSON.stringify(storageProductId));
+};
+
+//todo======================================
+export const onWishBtnClick = e => {
+  const targetBtn = e.currentTarget;
+  let storageWishProductId = JSON.parse(localStorage.getItem('wishlist'));
+  if (storageWishProductId === null) {
+    storageWishProductId = [];
+  }
+  if (!storageWishProductId.includes(currentProductId)) {
+    storageWishProductId.push(currentProductId);
+    targetBtn.textContent = 'Remove from Wishlist';
+    targetBtn.classList.add('in-wishlist');
+    targetBtn.removeEventListener('click', onWishBtnClick);
+    targetBtn.addEventListener('click', onRemoveFromWishClick);
+  }
+
+  localStorage.setItem('wishlist', JSON.stringify(storageWishProductId));
+};
+//todo======================================
+
+export const onRemoveFromCartClick = e => {
+  const targetBtn = e.currentTarget;
+
+  let storageProductId = JSON.parse(localStorage.getItem('cart'));
+  if (storageProductId === null) {
+    storageProductId = [];
+  }
+  if (storageProductId.includes(currentProductId)) {
+    const idIndex = storageProductId.indexOf(currentProductId);
+    storageProductId.splice(idIndex, 1);
+    targetBtn.textContent = 'Add to cart';
+    targetBtn.classList.remove('in-cart');
+    targetBtn.removeEventListener('click', onRemoveFromCartClick);
+    targetBtn.addEventListener('click', onCartBtnClick);
+  }
+  localStorage.setItem('cart', JSON.stringify(storageProductId));
+};
+//todo======================================
+export const onRemoveFromWishClick = e => {
+  const targetBtn = e.currentTarget;
+
+  let storageWishProductId = JSON.parse(localStorage.getItem('wishlist'));
+  if (storageWishProductId === null) {
+    storageWishProductId = [];
+  }
+  if (storageWishProductId.includes(currentProductId)) {
+    const idIndex = storageWishProductId.indexOf(currentProductId);
+    storageWishProductId.splice(idIndex, 1);
+    targetBtn.textContent = 'Add to Wishlist';
+    targetBtn.classList.remove('in-wishlist');
+    targetBtn.removeEventListener('click', onRemoveFromWishClick);
+    targetBtn.addEventListener('click', onWishBtnClick);
+  }
+  localStorage.setItem('wishlist', JSON.stringify(storageWishProductId));
+};
+//todo======================================
 
 export let productName;
 export const onFormSubmit = async e => {
@@ -97,21 +193,23 @@ export const onFormSubmit = async e => {
   productName = refs.inputElem.value.trim();
   const products = await getProductByName(productName);
   if (products.length === 0) {
-    /////////////////////////////// додати ізітост
+    //!!!!!!!!!!!!!!!!!!!!!!!! додати ізітост
   }
   const productsByNameMarkup = createProducts(products);
   refs.productsElem.innerHTML = productsByNameMarkup;
 };
 
-export const onCartBtnClick = e => {
-  let storageProductId = JSON.parse(localStorage.getItem('cart'));
-  if (storageProductId === null) {
-    storageProductId = [];
-  }
-  if (!storageProductId.includes(currentProductId)) {
-    storageProductId[storageProductId.length] = currentProductId;
-    e.currentTarget.textContent = 'Remove from cart'; //????????????????????
-  }
+export const onThemeBtn = e => {
+  const savedTheme = localStorage.getItem('theme');
 
-  localStorage.setItem('cart', JSON.stringify(storageProductId));
+  if (!savedTheme) {
+    localStorage.setItem('theme', 'light');
+  }
+  if (savedTheme === 'light') {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.body.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  }
 };

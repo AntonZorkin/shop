@@ -5,7 +5,7 @@ import {
   onLoadMoreClick,
   onCategoreClick,
   onFormSubmit,
-  onCartBtnClick,
+  onThemeBtn,
 } from './js/handlers';
 import { closeModal } from './js/modal';
 
@@ -17,4 +17,4 @@ refs.loadMoreElem.addEventListener('click', onLoadMoreClick);
 refs.productsElem.addEventListener('click', onProductsClick);
 refs.modalCloseElem.addEventListener('click', closeModal);
 refs.formElem.addEventListener('submit', onFormSubmit);
-// refs.cartBtnElem.addEventListener('click', onCartBtnClick);
+refs.themeElem.addEventListener('click', onThemeBtn);
