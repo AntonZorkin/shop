@@ -31,3 +31,23 @@ export const activateLoadMore = () => {
     refs.loadMoreElem.classList.add('is-hidden');
   }
 };
+
+export const checkLS = key => {
+  let value = localStorage.getItem(key);
+  if (value === null || value === '') {
+    localStorage.setItem(key, '[]');
+    return [];
+  } else {
+    try {
+      value = JSON.parse(localStorage.getItem(key));
+      if (Array.isArray(value)) {
+        return value;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      localStorage.setItem(key, '[]');
+      return [];
+    }
+  }
+};

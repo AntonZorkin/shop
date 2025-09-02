@@ -12,4 +12,6 @@ export const refs = {
   inputElem: document.querySelector('.search-form__input'),
   productIdElem: document.querySelector('.js-product-id'),
   themeElem: document.querySelector('.theme-toggle-btn'),
+  cartNumElem: document.querySelector('.js-cart-count'),
+  wishNumElem: document.querySelector('.js-wish-count'),
 };

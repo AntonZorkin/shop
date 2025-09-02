@@ -10,16 +10,45 @@ import {
   getProductById,
   getProductByName,
 } from './products-api';
-import { activeFirstBtn, activeBtn, categoryName } from './helpers';
+import { activeFirstBtn, activeBtn, categoryName, checkLS } from './helpers';
 import { openModal } from './modal';
 import { refs } from './refs';
 
 export let currentPage = 1;
-
 export const init = async () => {
-  const savedTheme = localStorage.getItem('theme');
+  //* перевірка localStorage на наявність у кошику та у wishlist товарів===========
+  let savedCart = localStorage.getItem('cart');
+  if (savedCart === null || savedCart === '') {
+    localStorage.setItem('cart', '[]');
+    localStorage.setItem('cartCount', '0');
+    refs.cartNumElem.textContent = 0;
+  } else {
+    localStorage.setItem(
+      'cartCount',
+      JSON.parse(localStorage.getItem('cart')).length
+    );
+    refs.cartNumElem.textContent = localStorage.getItem('cartCount');
+  }
+
+  let savedWish = localStorage.getItem('wishlist');
+  if (savedWish === null || savedWish === '') {
+    localStorage.setItem('wishlist', '[]');
+    localStorage.setItem('wishlistCount', '0');
+    refs.wishNumElem.textContent = 0;
+  } else {
+    localStorage.setItem(
+      'wishlistCount',
+      JSON.parse(localStorage.getItem('wishlist')).length
+    );
+    refs.wishNumElem.textContent = localStorage.getItem('wishlistCount');
+  }
+
+  //*===========================================
+
+  let savedTheme = localStorage.getItem('theme');
   if (!savedTheme) {
     localStorage.setItem('theme', 'light');
+    savedTheme = 'light';
   }
   if (savedTheme === 'dark') {
     document.body.setAttribute('data-theme', 'dark');
@@ -34,6 +63,14 @@ export const init = async () => {
   const products = await getProducts();
   const productsMarkup = createProducts(products);
   refs.productsElem.innerHTML = productsMarkup;
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // countCart = localStorage.getItem('cartCount');
+  // if (savedCartLength === null) {
+  // localStorage.setItem('cartCount', '0');
+  //   refs.cartNumElem.textContent = 0;
+  // } else {
+  // refs.cartNumElem.textContent = Number(savedCartLength);
+  // }
 };
 
 export const onCategoreClick = async e => {
@@ -72,18 +109,15 @@ export const onProductsClick = async e => {
   const li = e.target.closest('.products__item');
   if (!li) return;
   try {
-    const productId = Number(li.dataset.id);
+    const productId = Number(li.dataset.id); //?????????????????????????
     const data = await getProductById(productId);
     refs.modalElem.innerHTML = createModal(data);
     openModal();
-    const cartBtnElem = refs.modalRoot.querySelector('.js-cart-btn'); //!!!!!!!!!!!!!!!
+    const cartBtnElem = refs.modalRoot.querySelector('.js-cart-btn');
 
-    currentProductId = String(data.id);
+    currentProductId = String(data.id); //?????????????????????????
 
-    let storageProductId = JSON.parse(localStorage.getItem('cart'));
-    if (storageProductId === null) {
-      storageProductId = [];
-    }
+    let storageProductId = checkLS('cart');
 
     if (storageProductId.includes(currentProductId)) {
       cartBtnElem.textContent = 'Remove from cart';
@@ -93,13 +127,11 @@ export const onProductsClick = async e => {
       cartBtnElem.textContent = 'Add to cart';
       cartBtnElem.addEventListener('click', onCartBtnClick);
     }
-    ///////////////////////////////////////////////////////////////////////////////////////
+
+    //*======================================================
     const wishBtnElem = refs.modalRoot.querySelector('.js-wish-btn');
 
-    let storageWishProductId = JSON.parse(localStorage.getItem('wishlist'));
-    if (storageWishProductId === null) {
-      storageWishProductId = [];
-    }
+    let storageWishProductId = checkLS('wishlist');
 
     if (storageWishProductId.includes(currentProductId)) {
       wishBtnElem.textContent = 'Remove from Wishlist';
@@ -116,10 +148,7 @@ export const onProductsClick = async e => {
 
 export const onCartBtnClick = e => {
   const targetBtn = e.currentTarget;
-  let storageProductId = JSON.parse(localStorage.getItem('cart'));
-  if (storageProductId === null) {
-    storageProductId = [];
-  }
+  let storageProductId = checkLS('cart');
   if (!storageProductId.includes(currentProductId)) {
     storageProductId.push(currentProductId);
     targetBtn.textContent = 'Remove from cart';
@@ -127,17 +156,15 @@ export const onCartBtnClick = e => {
     targetBtn.removeEventListener('click', onCartBtnClick);
     targetBtn.addEventListener('click', onRemoveFromCartClick);
   }
-
   localStorage.setItem('cart', JSON.stringify(storageProductId));
+  refs.cartNumElem.textContent = storageProductId.length;
+  localStorage.setItem('cartCount', String(storageProductId.length));
 };
 
-//todo======================================
+//*======================================================
 export const onWishBtnClick = e => {
   const targetBtn = e.currentTarget;
-  let storageWishProductId = JSON.parse(localStorage.getItem('wishlist'));
-  if (storageWishProductId === null) {
-    storageWishProductId = [];
-  }
+  let storageWishProductId = checkLS('wishlist');
   if (!storageWishProductId.includes(currentProductId)) {
     storageWishProductId.push(currentProductId);
     targetBtn.textContent = 'Remove from Wishlist';
@@ -145,18 +172,15 @@ export const onWishBtnClick = e => {
     targetBtn.removeEventListener('click', onWishBtnClick);
     targetBtn.addEventListener('click', onRemoveFromWishClick);
   }
-
+  refs.wishNumElem.textContent = storageWishProductId.length;
   localStorage.setItem('wishlist', JSON.stringify(storageWishProductId));
+  localStorage.setItem('wishlistCount', String(storageWishProductId.length));
 };
-//todo======================================
+//*======================================================
 
 export const onRemoveFromCartClick = e => {
   const targetBtn = e.currentTarget;
-
-  let storageProductId = JSON.parse(localStorage.getItem('cart'));
-  if (storageProductId === null) {
-    storageProductId = [];
-  }
+  let storageProductId = checkLS('cart');
   if (storageProductId.includes(currentProductId)) {
     const idIndex = storageProductId.indexOf(currentProductId);
     storageProductId.splice(idIndex, 1);
@@ -166,15 +190,13 @@ export const onRemoveFromCartClick = e => {
     targetBtn.addEventListener('click', onCartBtnClick);
   }
   localStorage.setItem('cart', JSON.stringify(storageProductId));
+  refs.cartNumElem.textContent = storageProductId.length;
+  localStorage.setItem('cartCount', String(storageProductId.length));
 };
-//todo======================================
+//*======================================================
 export const onRemoveFromWishClick = e => {
   const targetBtn = e.currentTarget;
-
-  let storageWishProductId = JSON.parse(localStorage.getItem('wishlist'));
-  if (storageWishProductId === null) {
-    storageWishProductId = [];
-  }
+  let storageWishProductId = checkLS('wishlist');
   if (storageWishProductId.includes(currentProductId)) {
     const idIndex = storageWishProductId.indexOf(currentProductId);
     storageWishProductId.splice(idIndex, 1);
@@ -184,8 +206,10 @@ export const onRemoveFromWishClick = e => {
     targetBtn.addEventListener('click', onWishBtnClick);
   }
   localStorage.setItem('wishlist', JSON.stringify(storageWishProductId));
+  refs.wishNumElem.textContent = storageWishProductId.length;
+  localStorage.setItem('wishlistCount', String(storageWishProductId.length));
 };
-//todo======================================
+//*======================================================
 
 export let productName;
 export const onFormSubmit = async e => {
