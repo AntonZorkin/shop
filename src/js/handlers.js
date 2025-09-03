@@ -63,14 +63,6 @@ export const init = async () => {
   const products = await getProducts();
   const productsMarkup = createProducts(products);
   refs.productsElem.innerHTML = productsMarkup;
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // countCart = localStorage.getItem('cartCount');
-  // if (savedCartLength === null) {
-  // localStorage.setItem('cartCount', '0');
-  //   refs.cartNumElem.textContent = 0;
-  // } else {
-  // refs.cartNumElem.textContent = Number(savedCartLength);
-  // }
 };
 
 export const onCategoreClick = async e => {
@@ -236,4 +228,14 @@ export const onThemeBtn = e => {
     document.body.removeAttribute('data-theme');
     localStorage.setItem('theme', 'light');
   }
+};
+
+export const onCart = e => {
+  //? чому не працює?
+  const savedCart = checkLS('cart');
+  const savedCartNum = checkLS('cartCount');
+  console.log(savedCart);
+  console.log(savedCartNum);
+
+  refs.cartNumInCartElem.textContent = localStorage.getItem('cartCount');
 };
