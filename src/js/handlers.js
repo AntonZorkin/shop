@@ -230,12 +230,4 @@ export const onThemeBtn = e => {
   }
 };
 
-export const onCart = e => {
-  //? чому не працює?
-  const savedCart = checkLS('cart');
-  const savedCartNum = checkLS('cartCount');
-  console.log(savedCart);
-  console.log(savedCartNum);
-
-  refs.cartNumInCartElem.textContent = localStorage.getItem('cartCount');
-};
+export const onCart = e => {};
