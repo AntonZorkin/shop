@@ -1,0 +1,2 @@
+import"./assets/styles-lqBsz77e.js";import{g as s,r as a,h as i}from"./assets/handlers-TBmyRHd6.js";import"./assets/vendor-N5iQpiFS.js";const n=s("cart");a.cartNumElem.textContent=n.length;document.querySelector(".js-cart-number").textContent=n.length;const l=async r=>{let e=[];for(let t=0;t<r.length;t++){const o=await i(r[t]);e.push(o.price)}return e};let c;const u=async()=>{c=(await l(n)).reduce((e,t)=>e+t,0),console.log(c),document.querySelector(".js-cart-price").textContent=`$${c}`};u();
+//# sourceMappingURL=cart.js.map
