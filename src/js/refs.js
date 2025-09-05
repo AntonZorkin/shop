@@ -14,6 +14,6 @@ export const refs = {
   themeElem: document.querySelector('.theme-toggle-btn'),
   cartNumElem: document.querySelector('.js-cart-count'),
   wishNumElem: document.querySelector('.js-wish-count'),
-  cartElem: document.querySelector('.js-cart'),
-  wishElem: document.querySelector('.js-wish'),
+  // cartElem: document.querySelector('.js-cart'),
+  // wishElem: document.querySelector('.js-wish'),
 };

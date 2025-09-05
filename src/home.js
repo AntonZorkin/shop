@@ -6,10 +6,9 @@ import {
   onCategoreClick,
   onFormSubmit,
   onThemeBtn,
-  onCart,
+  // onCart,
 } from './js/handlers';
 import { closeModal } from './js/modal';
-
 import { refs } from './js/refs';
 
 init();
@@ -19,4 +18,5 @@ refs.productsElem.addEventListener('click', onProductsClick);
 refs.modalCloseElem.addEventListener('click', closeModal);
 refs.formElem.addEventListener('submit', onFormSubmit);
 refs.themeElem.addEventListener('click', onThemeBtn);
-refs.cartElem.addEventListener('click', onCart);
+// refs.cartElem.addEventListener('click', onCart);
+// refs.wishElem.addEventListener('click', onWish);

@@ -230,4 +230,4 @@ export const onThemeBtn = e => {
   }
 };
 
-export const onCart = e => {};
+// export const onCart = e => {};

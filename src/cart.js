@@ -5,6 +5,8 @@ import { getProductById } from './js/products-api.js';
 const savedCart = checkLS('cart');
 refs.cartNumElem.textContent = savedCart.length;
 document.querySelector('.js-cart-number').textContent = savedCart.length;
+const savedWish = checkLS('wishlist');
+refs.wishNumElem.textContent = savedWish.length;
 
 const collectPrices = async savedCart => {
   let prices = [];
