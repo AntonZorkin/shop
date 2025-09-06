@@ -2,6 +2,9 @@
 import { checkLS } from './js/helpers.js';
 import { refs } from './js/refs.js';
 import { getProductById } from './js/products-api.js';
+import { onCart } from './js/handlers.js';
+
+onCart();
 const savedCart = checkLS('cart');
 refs.cartNumElem.textContent = savedCart.length;
 document.querySelector('.js-cart-number').textContent = savedCart.length;
@@ -18,7 +21,7 @@ const collectPrices = async savedCart => {
 };
 
 let totalPrice;
-const initCartPage = async () => {
+const initCartBage = async () => {
   const prices = await collectPrices(savedCart);
   totalPrice = prices.reduce((sum, e) => {
     return sum + e;
@@ -26,4 +29,6 @@ const initCartPage = async () => {
   console.log(totalPrice);
   document.querySelector('.js-cart-price').textContent = `$${totalPrice}`;
 };
-initCartPage();
+initCartBage();
+
+//todo доробити відкриття картки товару та купівлю

@@ -230,4 +230,62 @@ export const onThemeBtn = e => {
   }
 };
 
-// export const onCart = e => {};
+export const onCart = async () => {
+  let savedCart = checkLS('cart');
+  if (!Array.isArray(savedCart)) savedCart = [];
+  if (savedCart.length === 0) {
+    //!додати повідомлення «Cart is empty»
+    return;
+  }
+  savedCart = savedCart.map(id => Number(id)).filter(n => Number.isFinite(n));
+  let cartProducts = [];
+  for (let i = 0; i < savedCart.length; i++) {
+    cartProducts.push(getProductById(savedCart[i]));
+  }
+  cartProducts = await Promise.allSettled(cartProducts);
+  const existingProducts = [];
+  for (let i = 0; i < cartProducts.length; i++) {
+    const res = cartProducts[i];
+    if (res.status === 'fulfilled') {
+      existingProducts.push(res.value);
+    } else {
+      //! вивести повідомлення 'Failed to load product НАЗВА';
+    }
+  }
+  if (existingProducts.length === 0) {
+    //!додати повідомлення «Cart is empty»
+    return;
+  }
+  const cartMarkup = createProducts(existingProducts);
+  refs.cartProducts.innerHTML = cartMarkup;
+};
+
+export const onWish = async () => {
+  let savedWish = checkLS('wishlist');
+  if (!Array.isArray(savedWish)) savedWish = [];
+  if (savedWish.length === 0) {
+    //!додати повідомлення «Wishlist is empty»
+    return;
+  }
+  savedWish = savedWish.map(id => Number(id)).filter(n => Number.isFinite(n));
+  let wishProducts = [];
+  for (let i = 0; i < savedWish.length; i++) {
+    wishProducts.push(getProductById(savedWish[i]));
+  }
+  wishProducts = await Promise.allSettled(wishProducts);
+  const existingProducts = [];
+  for (let i = 0; i < wishProducts.length; i++) {
+    const res = wishProducts[i];
+    if (res.status === 'fulfilled') {
+      existingProducts.push(res.value);
+    } else {
+      //! вивести повідомлення 'Failed to load product НАЗВА';
+    }
+  }
+  if (existingProducts.length === 0) {
+    //!додати повідомлення «Cart is empty»
+    return;
+  }
+  const cartMarkup = createProducts(existingProducts);
+  refs.wishProducts.innerHTML = cartMarkup;
+};
