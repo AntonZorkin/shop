@@ -2,7 +2,12 @@
 import { checkLS } from './js/helpers.js';
 import { refs } from './js/refs.js';
 import { getProductById } from './js/products-api.js';
-import { onCart } from './js/handlers.js';
+import {
+  onCart,
+  onProductsClick,
+  onRemoveFromCartClick,
+} from './js/handlers.js';
+import { closeModal } from './js/modal.js';
 
 onCart();
 const savedCart = checkLS('cart');
@@ -22,13 +27,26 @@ const collectPrices = async savedCart => {
 
 let totalPrice;
 const initCartBage = async () => {
-  const prices = await collectPrices(savedCart);
+  const prices = await collectPrices(checkLS('cart'));
   totalPrice = prices.reduce((sum, e) => {
     return sum + e;
   }, 0);
-  console.log(totalPrice);
-  document.querySelector('.js-cart-price').textContent = `$${totalPrice}`;
+  document.querySelector('.js-cart-price').textContent = `$${totalPrice.toFixed(
+    2
+  )}`;
 };
 initCartBage();
+refs.productsElem.addEventListener('click', onProductsClick);
+refs.modalCloseElem.addEventListener('click', closeModal);
 
-//todo доробити відкриття картки товару та купівлю
+refs.modalRoot.addEventListener('click', e => {
+  const cartBtn = e.target.closest('.js-cart-btn');
+  if (cartBtn === null) return;
+  onRemoveFromCartClick({ currentTarget: cartBtn });
+  closeModal();
+  onCart();
+  initCartBage();
+  const savedCart = checkLS('cart');
+  refs.cartNumElem.textContent = savedCart.length;
+  document.querySelector('.js-cart-number').textContent = savedCart.length;
+});

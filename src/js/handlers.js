@@ -267,6 +267,7 @@ export const onWish = async () => {
     //!додати повідомлення «Wishlist is empty»
     return;
   }
+  //???========================================
   savedWish = savedWish.map(id => Number(id)).filter(n => Number.isFinite(n));
   let wishProducts = [];
   for (let i = 0; i < savedWish.length; i++) {
@@ -283,7 +284,7 @@ export const onWish = async () => {
     }
   }
   if (existingProducts.length === 0) {
-    //!додати повідомлення «Cart is empty»
+    //!додати повідомлення «Wishlist is empty»
     return;
   }
   const cartMarkup = createProducts(existingProducts);
