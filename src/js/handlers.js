@@ -101,13 +101,14 @@ export const onProductsClick = async e => {
   const li = e.target.closest('.products__item');
   if (!li) return;
   try {
-    const productId = Number(li.dataset.id); //?????????????????????????
+    const productId = Number(li.dataset.id);
     const data = await getProductById(productId);
     refs.modalElem.innerHTML = createModal(data);
+    refs.modalRoot.dataset.id = String(data.id);
     openModal();
     const cartBtnElem = refs.modalRoot.querySelector('.js-cart-btn');
 
-    currentProductId = String(data.id); //?????????????????????????
+    currentProductId = String(data.id);
 
     let storageProductId = checkLS('cart');
 

@@ -10,6 +10,7 @@ export const closeModal = () => {
   refs.modalRoot.classList.remove('modal--is-open');
   document.removeEventListener('keydown', onEscKeyDown);
   refs.modalRoot.removeEventListener('click', onOutOfModalClick);
+  delete refs.modalRoot.dataset.id;
 };
 
 export const onEscKeyDown = e => {
