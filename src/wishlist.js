@@ -1,7 +1,7 @@
 //Логіка сторінки Wishlist
-import { checkLS } from './js/helpers';
+import { checkLS, addToCartById, removeFromWishlistById } from './js/helpers';
 import { refs } from './js/refs';
-import { onWish, onCartBtnClick } from './js/handlers';
+import { onWish } from './js/handlers';
 import { onProductsClick, onRemoveFromWishClick } from './js/handlers.js';
 import { closeModal } from './js/modal.js';
 
@@ -30,10 +30,16 @@ refs.modalRoot.addEventListener('click', e => {
     const id =
       e.target.closest('[data-id]')?.dataset.id || refs.modalRoot.dataset.id;
     if (!id) return;
-    const wishBtn = refs.modalRoot.querySelector('.js-wish-btn');
-    onCartBtnClick({ currentTarget: cartBtn });
-    onRemoveFromWishClick({ currentTarget: wishBtn });
+    // const wishBtn = refs.modalRoot.querySelector('.js-wish-btn');
+    addToCartById(id);
+    removeFromWishlistById(id);
+    const wishBtnInModal = refs.modalRoot.querySelector('.js-wish-btn');
+    if (wishBtnInModal) {
+      wishBtnInModal.textContent = 'Add to wishlist';
+      wishBtnInModal.classList.remove('btn--in-wishlist');
+    }
     updateBadges();
     onWish();
+    return;
   } else return; //!додати кнопку купівлі
 });

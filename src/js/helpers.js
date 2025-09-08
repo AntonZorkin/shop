@@ -51,3 +51,17 @@ export const checkLS = key => {
     }
   }
 };
+
+export const addToCartById = id => {
+  const cart = checkLS('cart');
+  if (!cart.includes(String(id))) {
+    cart.push(String(id));
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+};
+
+export const removeFromWishlistById = id => {
+  const wishlist = checkLS('wishlist');
+  const updated = wishlist.filter(itemId => String(itemId) !== String(id));
+  localStorage.setItem('wishlist', JSON.stringify(updated));
+};
