@@ -4,7 +4,7 @@ import { checkLS, addToCartById, removeFromWishlistById } from './js/helpers';
 import { refs } from './js/refs';
 import { onWish } from './js/handlers';
 import { onProductsClick, onRemoveFromWishClick } from './js/handlers.js';
-import { closeModal } from './js/modal.js';
+import { closeModal, onBuyBtnClick } from './js/modal.js';
 
 onWish();
 const updateBadges = () => {
@@ -43,12 +43,9 @@ refs.modalRoot.addEventListener('click', e => {
     onWish();
     return;
   } else if (buyBtn) {
-    iziToast.success({
-      message: 'Product added to your order.',
-      timeout: 3000,
-      position: 'topCenter',
-    });
-    closeModal();
-    return;
+    onBuyBtnClick();
+    onWish();
+    const savedWish = checkLS('wishlist');
+    refs.wishNumElem.textContent = savedWish.length;
   } else return;
 });

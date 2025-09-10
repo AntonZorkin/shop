@@ -7,7 +7,7 @@ import {
   onProductsClick,
   onRemoveFromCartClick,
 } from './js/handlers.js';
-import { closeModal } from './js/modal.js';
+import { closeModal, onBuyBtnClick } from './js/modal.js';
 
 onCart();
 const savedCart = checkLS('cart');
@@ -44,6 +44,17 @@ refs.modalRoot.addEventListener('click', e => {
   if (cartBtn === null) return;
   onRemoveFromCartClick({ currentTarget: cartBtn });
   closeModal();
+  onCart();
+  initCartBage();
+  const savedCart = checkLS('cart');
+  refs.cartNumElem.textContent = savedCart.length;
+  document.querySelector('.js-cart-number').textContent = savedCart.length;
+});
+
+refs.modalRoot.addEventListener('click', e => {
+  const buytBtn = e.target.closest('.js-buy-btn');
+  if (buytBtn === null) return;
+  onBuyBtnClick();
   onCart();
   initCartBage();
   const savedCart = checkLS('cart');
