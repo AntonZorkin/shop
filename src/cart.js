@@ -50,5 +50,3 @@ refs.modalRoot.addEventListener('click', e => {
   refs.cartNumElem.textContent = savedCart.length;
   document.querySelector('.js-cart-number').textContent = savedCart.length;
 });
-
-//!зробити пагінацію

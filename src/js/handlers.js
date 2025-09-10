@@ -1,3 +1,4 @@
+import iziToast from 'izitoast';
 import {
   createCategories,
   createProducts,
@@ -210,7 +211,12 @@ export const onFormSubmit = async e => {
   productName = refs.inputElem.value.trim();
   const products = await getProductByName(productName);
   if (products.length === 0) {
-    //!!!!!!!!!!!!!!!!!!!!!!!! додати ізітост
+    iziToast.info({
+      message: 'No more products available.',
+      timeout: 3000,
+      position: 'topCenter',
+      color: 'yellow',
+    });
   }
   const productsByNameMarkup = createProducts(products);
   refs.productsElem.innerHTML = productsByNameMarkup;
@@ -235,7 +241,12 @@ export const onCart = async () => {
   let savedCart = checkLS('cart');
   if (!Array.isArray(savedCart)) savedCart = [];
   if (savedCart.length === 0) {
-    //!додати повідомлення «Cart is empty»
+    iziToast.info({
+      message: 'Cart is empty',
+      timeout: 3000,
+      position: 'topCenter',
+      color: 'yellow',
+    });
     return;
   }
   savedCart = savedCart.map(id => Number(id)).filter(n => Number.isFinite(n));
@@ -250,11 +261,21 @@ export const onCart = async () => {
     if (res.status === 'fulfilled') {
       existingProducts.push(res.value);
     } else {
-      //! вивести повідомлення 'Failed to load product НАЗВА';
+      iziToast.warning({
+        message: 'Failed to load product',
+        timeout: 3000,
+        position: 'topCenter',
+        color: 'red',
+      });
     }
   }
   if (existingProducts.length === 0) {
-    //!додати повідомлення «Cart is empty»
+    iziToast.info({
+      message: 'Cart is empty',
+      timeout: 3000,
+      position: 'topCenter',
+      color: 'yellow',
+    });
     return;
   }
   const cartMarkup = createProducts(existingProducts);
@@ -265,7 +286,12 @@ export const onWish = async () => {
   let savedWish = checkLS('wishlist');
   if (!Array.isArray(savedWish)) savedWish = [];
   if (savedWish.length === 0) {
-    //!додати повідомлення «Wishlist is empty»
+    iziToast.info({
+      message: '«Wishlist is empty',
+      timeout: 3000,
+      position: 'topCenter',
+      color: 'yellow',
+    });
     return;
   }
   //???========================================
@@ -281,11 +307,21 @@ export const onWish = async () => {
     if (res.status === 'fulfilled') {
       existingProducts.push(res.value);
     } else {
-      //! вивести повідомлення 'Failed to load product НАЗВА';
+      iziToast.warning({
+        message: 'Failed to load product',
+        timeout: 3000,
+        position: 'topCenter',
+        color: 'red',
+      });
     }
   }
   if (existingProducts.length === 0) {
-    //!додати повідомлення «Wishlist is empty»
+    iziToast.info({
+      message: '«Wishlist is empty',
+      timeout: 3000,
+      position: 'topCenter',
+      color: 'yellow',
+    });
     return;
   }
   const cartMarkup = createProducts(existingProducts);

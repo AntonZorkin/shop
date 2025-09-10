@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { BASE_URL, ENDPOINT, LIMIT } from './constants';
 import { categoryName, activateLoadMore } from './helpers';
-import { refs } from './refs';
-import { currentPage, productName } from './handlers';
+
+import { currentPage } from './handlers';
 
 axios.defaults.baseURL = BASE_URL;
 
@@ -72,6 +72,8 @@ export const getProductByName = async productName => {
       params,
     });
     const data = response.data;
+    totalPages = Math.ceil(data.total / LIMIT);
+    activateLoadMore();
     return data.products;
   } catch (error) {
     throw error;

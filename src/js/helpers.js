@@ -1,6 +1,7 @@
 import { refs } from './refs';
 import { totalPages } from './products-api';
 import { currentPage } from './handlers';
+import iziToast from 'izitoast';
 
 export let categoryName = 'All';
 export const activeFirstBtn = () => {
@@ -29,6 +30,12 @@ export const activateLoadMore = () => {
     refs.loadMoreElem.classList.remove('is-hidden');
   } else {
     refs.loadMoreElem.classList.add('is-hidden');
+    iziToast.info({
+      message: 'No more products available.',
+      timeout: 3000,
+      position: 'topCenter',
+      color: 'yellow',
+    });
   }
 };
 

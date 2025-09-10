@@ -1,4 +1,5 @@
 //Логіка сторінки Wishlist
+import iziToast from 'izitoast';
 import { checkLS, addToCartById, removeFromWishlistById } from './js/helpers';
 import { refs } from './js/refs';
 import { onWish } from './js/handlers';
@@ -18,6 +19,7 @@ refs.modalCloseElem.addEventListener('click', closeModal);
 refs.modalRoot.addEventListener('click', e => {
   const wishBtn = e.target.closest('.js-wish-btn');
   const cartBtn = e.target.closest('.js-cart-btn');
+  const buyBtn = e.target.closest('.js-buy-btn');
   if (wishBtn) {
     onRemoveFromWishClick({ currentTarget: wishBtn });
     closeModal();
@@ -30,7 +32,6 @@ refs.modalRoot.addEventListener('click', e => {
     const id =
       e.target.closest('[data-id]')?.dataset.id || refs.modalRoot.dataset.id;
     if (!id) return;
-    // const wishBtn = refs.modalRoot.querySelector('.js-wish-btn');
     addToCartById(id);
     removeFromWishlistById(id);
     const wishBtnInModal = refs.modalRoot.querySelector('.js-wish-btn');
@@ -41,5 +42,13 @@ refs.modalRoot.addEventListener('click', e => {
     updateBadges();
     onWish();
     return;
-  } else return; //!додати кнопку купівлі
+  } else if (buyBtn) {
+    iziToast.success({
+      message: 'Product added to your order.',
+      timeout: 3000,
+      position: 'topCenter',
+    });
+    closeModal();
+    return;
+  } else return;
 });
