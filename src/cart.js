@@ -1,14 +1,17 @@
 //Логіка сторінки Cart
-import { checkLS } from './js/helpers.js';
+import { checkLS, setTheme } from './js/storage';
 import { refs } from './js/refs.js';
 import { getProductById } from './js/products-api.js';
 import {
   onCart,
   onProductsClick,
   onRemoveFromCartClick,
+  onThemeBtn,
 } from './js/handlers.js';
 import { closeModal, onBuyBtnClick } from './js/modal.js';
 
+setTheme();
+refs.themeElem.addEventListener('click', onThemeBtn);
 onCart();
 const savedCart = checkLS('cart');
 refs.cartNumElem.textContent = savedCart.length;
@@ -52,8 +55,8 @@ refs.modalRoot.addEventListener('click', e => {
 });
 
 refs.modalRoot.addEventListener('click', e => {
-  const buytBtn = e.target.closest('.js-buy-btn');
-  if (buytBtn === null) return;
+  const buyBtn = e.target.closest('.js-buy-btn');
+  if (buyBtn === null) return;
   onBuyBtnClick();
   onCart();
   initCartBage();

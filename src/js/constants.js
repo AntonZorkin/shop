@@ -1,3 +1,4 @@
+//constants
 export const BASE_URL = 'https://dummyjson.com/';
 export const ENDPOINT = {
   CATEGORIES: 'products/category-list',

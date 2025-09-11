@@ -6,7 +6,6 @@ import {
   onCategoreClick,
   onFormSubmit,
   onThemeBtn,
-  // onCart,
 } from './js/handlers';
 import { closeModal } from './js/modal';
 import { refs } from './js/refs';

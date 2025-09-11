@@ -1,5 +1,4 @@
-import { refs } from './refs';
-
+//render-function
 export const createCategories = data =>
   data
     .map(

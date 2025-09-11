@@ -1,11 +1,21 @@
 //Логіка сторінки Wishlist
-import iziToast from 'izitoast';
-import { checkLS, addToCartById, removeFromWishlistById } from './js/helpers';
 import { refs } from './js/refs';
 import { onWish } from './js/handlers';
-import { onProductsClick, onRemoveFromWishClick } from './js/handlers.js';
+import {
+  checkLS,
+  addToCartById,
+  removeFromWishlistById,
+  setTheme,
+} from './js/storage';
+import {
+  onProductsClick,
+  onRemoveFromWishClick,
+  onThemeBtn,
+} from './js/handlers.js';
 import { closeModal, onBuyBtnClick } from './js/modal.js';
 
+setTheme();
+refs.themeElem.addEventListener('click', onThemeBtn);
 onWish();
 const updateBadges = () => {
   refs.cartNumElem.textContent = checkLS('cart').length;
@@ -37,7 +47,7 @@ refs.modalRoot.addEventListener('click', e => {
     const wishBtnInModal = refs.modalRoot.querySelector('.js-wish-btn');
     if (wishBtnInModal) {
       wishBtnInModal.textContent = 'Add to wishlist';
-      wishBtnInModal.classList.remove('btn--in-wishlist');
+      wishBtnInModal.classList.remove('in-wishlist');
     }
     updateBadges();
     onWish();

@@ -1,3 +1,4 @@
+//handlers
 import iziToast from 'izitoast';
 import {
   createCategories,
@@ -10,8 +11,15 @@ import {
   getProducts,
   getProductById,
   getProductByName,
+  totalPages,
 } from './products-api';
-import { activeFirstBtn, activeBtn, categoryName, checkLS } from './helpers';
+import {
+  activeFirstBtn,
+  activateLoadMore,
+  activeBtn,
+  categoryName,
+} from './helpers';
+import { checkLS, setTheme } from './storage';
 import { openModal } from './modal';
 import { refs } from './refs';
 
@@ -46,16 +54,7 @@ export const init = async () => {
 
   //*===========================================
 
-  let savedTheme = localStorage.getItem('theme');
-  if (!savedTheme) {
-    localStorage.setItem('theme', 'light');
-    savedTheme = 'light';
-  }
-  if (savedTheme === 'dark') {
-    document.body.setAttribute('data-theme', 'dark');
-  } else {
-    document.body.removeAttribute('data-theme');
-  }
+  setTheme();
 
   const data = await getCategories();
   const categoriesMarkup = createCategories(['All', ...data]);
@@ -64,6 +63,7 @@ export const init = async () => {
   const products = await getProducts();
   const productsMarkup = createProducts(products);
   refs.productsElem.innerHTML = productsMarkup;
+  activateLoadMore();
 };
 
 export const onCategoreClick = async e => {
@@ -76,6 +76,7 @@ export const onCategoreClick = async e => {
         : await getProductsByCategory();
 
     refs.productsElem.innerHTML = createProducts(products);
+    activateLoadMore();
   } catch (error) {
     throw error;
   }
@@ -92,6 +93,15 @@ export const onLoadMoreClick = async e => {
     }
     const productsMarkup = createProducts(products);
     refs.productsElem.insertAdjacentHTML('beforeend', productsMarkup);
+    activateLoadMore();
+    if (currentPage >= totalPages) {
+      iziToast.info({
+        message: 'No more products available.',
+        timeout: 3000,
+        position: 'topCenter',
+        color: 'yellow',
+      });
+    }
   } catch (error) {
     throw error;
   }
@@ -129,7 +139,7 @@ export const onProductsClick = async e => {
 
     if (storageWishProductId.includes(currentProductId)) {
       wishBtnElem.textContent = 'Remove from Wishlist';
-      wishBtnElem.classList.add('in-wish');
+      wishBtnElem.classList.add('in-wishlist');
       wishBtnElem.addEventListener('click', onRemoveFromWishClick);
     } else {
       wishBtnElem.textContent = 'Add to Wishlist';
@@ -205,14 +215,14 @@ export const onRemoveFromWishClick = e => {
 };
 //*======================================================
 
-export let productName;
+let productName;
 export const onFormSubmit = async e => {
   e.preventDefault();
   productName = refs.inputElem.value.trim();
   const products = await getProductByName(productName);
   if (products.length === 0) {
     iziToast.info({
-      message: 'No more products available.',
+      message: 'No products found.',
       timeout: 3000,
       position: 'topCenter',
       color: 'yellow',
@@ -287,14 +297,14 @@ export const onWish = async () => {
   if (!Array.isArray(savedWish)) savedWish = [];
   if (savedWish.length === 0) {
     iziToast.info({
-      message: '«Wishlist is empty',
+      message: 'Wishlist is empty',
       timeout: 3000,
       position: 'topCenter',
       color: 'yellow',
     });
     return;
   }
-  //???========================================
+  //*========================================
   savedWish = savedWish.map(id => Number(id)).filter(n => Number.isFinite(n));
   let wishProducts = [];
   for (let i = 0; i < savedWish.length; i++) {
@@ -317,7 +327,7 @@ export const onWish = async () => {
   }
   if (existingProducts.length === 0) {
     iziToast.info({
-      message: '«Wishlist is empty',
+      message: 'Wishlist is empty',
       timeout: 3000,
       position: 'topCenter',
       color: 'yellow',

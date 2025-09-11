@@ -1,6 +1,7 @@
+//products-api
 import axios from 'axios';
 import { BASE_URL, ENDPOINT, LIMIT } from './constants';
-import { categoryName, activateLoadMore } from './helpers';
+import { categoryName } from './helpers';
 
 import { currentPage } from './handlers';
 
@@ -29,7 +30,6 @@ export async function getProductsByCategory() {
     });
     const data = response.data;
     totalPages = Math.ceil(data.total / LIMIT);
-    activateLoadMore();
     return data.products;
   } catch (error) {
     throw error;
@@ -45,7 +45,6 @@ export async function getProducts() {
     const response = await axios.get(`${ENDPOINT.PRODUCTS}`, { params });
     const data = response.data;
     totalPages = Math.ceil(data.total / LIMIT);
-    activateLoadMore();
     return data.products;
   } catch (error) {
     throw error;
@@ -73,7 +72,6 @@ export const getProductByName = async productName => {
     });
     const data = response.data;
     totalPages = Math.ceil(data.total / LIMIT);
-    activateLoadMore();
     return data.products;
   } catch (error) {
     throw error;

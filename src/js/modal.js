@@ -1,7 +1,7 @@
+//modal
 import { refs } from './refs';
-import { checkLS } from './helpers';
+import { checkLS } from './storage';
 import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
 
 refs.modalElem.addEventListener('click', e => {
   const buyBtn = e.target.closest('.js-buy-btn');
@@ -58,7 +58,7 @@ export const onBuyBtnClick = () => {
     localStorage.setItem('wishlistCount', String(wish.length));
   }
   iziToast.success({
-    message: 'Product added to your order.',
+    message: 'Purchase successful.',
     timeout: 3000,
     position: 'topCenter',
   });
