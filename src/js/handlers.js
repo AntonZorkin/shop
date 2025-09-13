@@ -257,8 +257,10 @@ export const onCart = async () => {
       position: 'topCenter',
       color: 'yellow',
     });
+    refs.cartProducts.innerHTML = '';
     return;
   }
+
   savedCart = savedCart.map(id => Number(id)).filter(n => Number.isFinite(n));
   let cartProducts = [];
   for (let i = 0; i < savedCart.length; i++) {
@@ -286,6 +288,7 @@ export const onCart = async () => {
       position: 'topCenter',
       color: 'yellow',
     });
+    refs.cartProducts.innerHTML = '';
     return;
   }
   const cartMarkup = createProducts(existingProducts);
@@ -302,6 +305,7 @@ export const onWish = async () => {
       position: 'topCenter',
       color: 'yellow',
     });
+    refs.wishProducts.innerHTML = '';
     return;
   }
   //*========================================
@@ -332,6 +336,7 @@ export const onWish = async () => {
       position: 'topCenter',
       color: 'yellow',
     });
+    refs.wishProducts.innerHTML = '';
     return;
   }
   const cartMarkup = createProducts(existingProducts);

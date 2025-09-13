@@ -2,6 +2,7 @@
 import { refs } from './refs';
 import { checkLS } from './storage';
 import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 refs.modalElem.addEventListener('click', e => {
   const buyBtn = e.target.closest('.js-buy-btn');
